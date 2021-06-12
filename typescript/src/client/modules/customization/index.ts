@@ -397,6 +397,7 @@ export function pedTurnAround(ped: number): void {
 function startPlayerCustomization(
   cb: (appearance?: PedAppearance) => void,
   _config = DEFAULT_CUSTOMIZATION_CONFIG,
+  disableExit = false,
 ): void {
   const playerPed = PlayerPedId();
 
@@ -421,9 +422,16 @@ function startPlayerCustomization(
   SetEntityInvincible(playerPed, true);
   TaskStandStill(playerPed, -1);
 
+  let exitClass = 'show';
+  if (disableExit) {
+    exitClass = 'hide';
+  }
+
   const nuiMessage = {
     type: 'appearance_display',
-    payload: {},
+    payload: {
+      exitClass: exitClass,
+    },
   };
 
   SendNuiMessage(JSON.stringify(nuiMessage));

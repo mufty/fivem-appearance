@@ -136,6 +136,8 @@ const Appearance = () => {
     setSaveModal(true);
   }, [setSaveModal]);
 
+  let exitClass = 'show';
+
   const handleExitModal = useCallback(() => {
     setExitModal(true);
   }, [setExitModal]);
@@ -383,12 +385,14 @@ const Appearance = () => {
   useEffect(() => {
     Nui.post('appearance_get_locales').then(result => setLocales(JSON.parse(result)));
 
-    Nui.onEvent('appearance_display', () => {
-      setDisplay({ appearance: true });
+    Nui.onEvent('appearance_display', (appearanceData: any) => {
+      exitClass = appearanceData.exitClass;
+      setDisplay({ appearance: true, exitClass: appearanceData.exitClass });
     });
 
     Nui.onEvent('appearance_hide', () => {
-      setDisplay({ appearance: false });
+      exitClass = 'show';
+      setDisplay({ appearance: false, exitClass: 'show' });
       setData(APPEARANCE_INITIAL_STATE);
       setStoredData(APPEARANCE_INITIAL_STATE);
       setAppearanceSettings(SETTINGS_INITIAL_STATE);
@@ -400,9 +404,11 @@ const Appearance = () => {
   useEffect(() => {
     if (display.appearance) {
       (async () => {
-        const { config: _config, appearanceSettings: settings, appearanceData } = await Nui.post(
-          'appearance_get_settings_and_data',
-        );
+        const {
+          config: _config,
+          appearanceSettings: settings,
+          appearanceData,
+        } = await Nui.post('appearance_get_settings_and_data');
         setConfig(_config);
         setAppearanceSettings(settings);
         setStoredData(appearanceData);
@@ -501,6 +507,7 @@ const Appearance = () => {
                   handleRotateRight={handleRotateRight}
                   handleSave={handleSaveModal}
                   handleExit={handleExitModal}
+                  exitClass={display.exitClass}
                 />
               </Wrapper>
             </animated.div>
