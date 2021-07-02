@@ -1,6 +1,8 @@
 release/
 typescript/build/
 ui/build/
+ui/yarn.lock
+.idea/
 
 # Logs
 logs
