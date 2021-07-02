@@ -87,11 +87,11 @@ export function getComponentSettings(ped: number, componentId: number): Componen
   const settings = {
     component_id: componentId,
     drawable: {
-      min: 0,
+      min: -1,
       max: GetNumberOfPedDrawableVariations(ped, componentId) - 1,
     },
     texture: {
-      min: 0,
+      min: -1,
       max: GetNumberOfPedTextureVariations(ped, componentId, drawableId) - 1,
     },
   };
